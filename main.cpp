@@ -22,17 +22,14 @@ void generateTikz(Node* root, std::ofstream& outFile) {
         return;
     }
 
-    // Wypisywanie węzła
     outFile << "\\node {" << root->value << "}\n";
 
-    // Wypisywanie lewego poddrzewa
     if (root->left != nullptr) {
         outFile << "child {" << std::endl;
         generateTikz(root->left, outFile);
         outFile << "}\n";
     }
 
-    // Wypisywanie prawego poddrzewa
     if (root->right != nullptr) {
         outFile << "child {" << std::endl;
         generateTikz(root->right, outFile);
@@ -54,7 +51,7 @@ int main() {
                 break;
             }
             Node *root = nullptr;
-            bst->build(bst->getNodesValues(), root);
+            root = bst->build(bst->getNodesValues(), root);
 
             std::ofstream outFile("bst_tree.tex");
             if (!outFile.is_open()) {
@@ -62,25 +59,26 @@ int main() {
                 return 1;
             }
 
-            // Rozpoczęcie kodu TikZ
             outFile << "\\documentclass{standalone}\n";
             outFile << "\\usepackage{tikz}\n";
             outFile << "\\begin{document}\n";
             outFile << "\\begin{tikzpicture}\n";
             outFile << "[every node/.style={circle, draw}]\n";
 
-            // Generowanie kodu TikZ dla drzewa BST
+            outFile << "\\tikzset{level 1/.style={sibling distance=60mm}, "
+                    << "level 2/.style={sibling distance=30mm}, "
+                    << "level 3/.style={sibling distance=20mm}, "
+                    << "level 4/.style={sibling distance=10mm}}\n";
+            outFile << "\\begin{scope}[every node/.style={circle,draw}, level distance=30mm]\n";
+            outFile << "\\node {" << root->value << "}\n";
             generateTikz(root, outFile);
-
-            // Zakończenie kodu TikZ
             outFile << ";\n";
+            outFile << "\\end{scope}\n";
+
             outFile << "\\end{tikzpicture}\n";
             outFile << "\\end{document}\n";
 
-            // Zamknięcie pliku
             outFile.close();
-
-            std::cout << "Plik bst_tree.tex został wygenerowany." << std::endl;
 
             break;
         }

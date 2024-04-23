@@ -21,7 +21,7 @@ Node *BST::insert(int value, Node *node) {
     return node;
 }
 
-void BST::build(const std::vector<int> &values, Node *root) {
+Node * BST::build(const std::vector<int> &values, Node *root) {
     std::cout<<"inserting: ";
     for (int value: values) {
         root = insert(value, root);
@@ -31,6 +31,7 @@ void BST::build(const std::vector<int> &values, Node *root) {
             std::cout<<value<<std::endl;
         }
     }
+    return root;
 }
 
 std::vector<int> BST::getNodesValues() {

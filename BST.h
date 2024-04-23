@@ -8,7 +8,7 @@ public:
     BST();
     Node * insert(int value, Node* node);
 
-    void build(const std::vector<int>& values, Node* root);
+    Node * build(const std::vector<int>& values, Node* root);
     std::vector<int> getNodesValues();
 };
 
