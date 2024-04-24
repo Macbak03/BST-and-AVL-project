@@ -9,4 +9,6 @@ add_executable(BST_and_AVL main.cpp
         Tree.cpp
         AVL.cpp
         BST.h
-        BST.cpp)
+        BST.cpp
+        Action.h
+        Action.cpp)
