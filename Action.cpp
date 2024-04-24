@@ -36,7 +36,13 @@ int Action::handleAction() {
                 break;
             }
             case 4: { //Delete
-                deleteTree();
+                cout << "Deleting: "; 
+                std::vector<Node*> deleteNodes = deleteHelp();
+                for(int i = 0; i > deleteNodes.size(); i++){
+                    cout << deleteNodes[i] << " ";
+                }
+                cout << "\n";
+                cout << "Tree succesfully removed" << endl;
                 break;
             }
             case 5: { //Export
@@ -89,26 +95,64 @@ int Action::checkActionType(const std::string &action) {
 void Action::showHelp() {
     int width = 15;
     cout << left; // Align text to the left
-    cout << setw(width) << "Help" << "Show this message\n";
-    cout << setw(width) << "Print" << "Print the tree using In-order, Pre-order, Post-order\n";
-    cout << setw(width) << "Remove" << "Remove elements from the tree\n";
+    cout << setw(width) << "Help" << "Show this message\n";  // done 
+    cout << setw(width) << "Print" << "Print the tree using In-order, Pre-order, Post-order\n"; // done
+    cout << setw(width) << "Remove" << "Remove elements from the tree\n"; // done + balance dodac tej trzeba :)
     cout << setw(width) << "Delete" << "Delete the whole tree\n";
-    cout << setw(width) << "Export" << "Export the tree to tikzpicture\n";
-    cout << setw(width) << "Rebalance" << "Rebalance the tree\n";
-    cout << setw(width) << "FindMinMax" << "Finds minimal and maximal value in the tree\n";
-    cout << setw(width) << "Exit" << "Exits the program (same as Ctrl+D)\n";
+    cout << setw(width) << "Export" << "Export the tree to tikzpicture\n"; // done 
+    cout << setw(width) << "Rebalance" << "Rebalance the tree\n"; 
+    cout << setw(width) << "FindMinMax" << "Finds minimal and maximal value in the tree\n"; //done
+    cout << setw(width) << "Exit" << "Exits the program (same as Ctrl+D)\n"; //done
 }
 
 void Action::print() {
-
+    cout << "In-Order: ";
+    printInOrder(root);
+    cout << "\n";
+    cout << "Post-Order: ";
+    printPostOrder(root);
+    cout << "\n";
+    cout << "Pre-Order: ";
+    printPreOrder(root);
+    cout << "\n";
 }
 
 void Action::remove() {
+    int n;
+    cout << "Nodes> ";
+    cin >> n;
 
+    vector<int> keys(n);
+
+    cout << "Delete> ";
+    for (int i = 0; i < n; ++i) {
+        cin >> keys[i];
+    }
+    
+    if(treeType == "BST"){
+        for(int key : keys){
+            root = removeHelp(root, key);
+        }        
+    }else{
+        for(int key: keys){
+            root = removeHelp(root, key);
+            //balance
+        }
+    }
 }
 
-void Action::deleteTree() {
+void Action::deleteTree(Node* node, std::vector<Node*> &deletedNodes) {
+    if (node == nullptr){
+        return;
+    }
+    
+    deleteTree(node->left, deletedNodes);
+    deleteTree(node->right, deletedNodes);
+    
+    deletedNodes.push_back(node);
 
+    delete node;
+    node = nullptr;
 }
 
 void Action::generateTikz(Node *node, ofstream &outFile) {
@@ -130,6 +174,73 @@ void Action::generateTikz(Node *node, ofstream &outFile) {
         outFile << "}\n";
     }
 
+}
+
+void Action::printPreOrder(Node *node){
+    if (node == nullptr)
+        return;
+    std::cout << node->value << ", ";
+    printPreOrder(node->left);
+    printPreOrder(node->right);
+}
+
+void Action::printPostOrder(Node *node){
+    if (node == nullptr)
+        return;
+    printPostOrder(node->left);
+    printPostOrder(node->right);
+    std::cout << node->value << ", ";
+}
+
+void Action::printInOrder(Node *node){
+    if (node == nullptr)
+        return;
+    printInOrder(node->left);
+    std::cout << node->value << ", ";
+    printInOrder(node->right);
+}
+
+Node *Action::findMin(Node *node){
+    while (node->left != nullptr){
+        node = node->left;
+    }
+    return node;
+}
+
+Node *Action::removeHelp(Node *node, int key){
+    if (node == nullptr){
+        return nullptr;
+    }
+
+    if (key < node->value){
+        node->left = removeHelp(node->left, key);
+    }
+    else if (key > node->value){
+        node->right = removeHelp(node->right, key);
+    }
+    else {
+
+        if (node->left == nullptr) {
+            Node* temp = node->right;
+            delete node;
+            return temp;
+        } else if (node->right == nullptr) {
+            Node* temp = node->left;
+            delete node;
+            return temp;
+        }
+
+        Node* temp = findMin(node->right);
+        node->value = temp->value;
+        node->right = removeHelp(node->right, temp->value);
+    }
+    return node;
+}
+
+std::vector<Node*> Action::deleteHelp(){
+    std::vector<Node*> deletedNodes;
+    deleteTree(root, deletedNodes);
+    return deletedNodes;
 }
 
 void Action::exportTree(Node *node, string treeName) {

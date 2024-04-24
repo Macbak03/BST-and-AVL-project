@@ -16,6 +16,6 @@ protected:
     std::vector<int> nodesValues;
 
 public:
-    virtual int insertNodeValues();
+    virtual int insertNodeValues() = 0;
 };
 

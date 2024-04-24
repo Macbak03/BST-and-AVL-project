@@ -15,11 +15,18 @@ private:
     static void showHelp();
     void print();
     void remove();
-    void deleteTree();
+    void deleteTree(Node* node, std::vector<Node*> &deletedNodes);
     void exportTree(Node* node, std::string treeName);
     void rebalance();
     static void findMinMax(Node* node);
 
     void generateTikz(Node* node, std::ofstream& outFile);
+protected:
+    void printPreOrder(Node* node);
+    void printPostOrder(Node* node);
+    void printInOrder(Node* node);
+    Node* findMin(Node* node);
+    Node* removeHelp(Node* node, int key);
+    std::vector<Node*> deleteHelp();
 };
 

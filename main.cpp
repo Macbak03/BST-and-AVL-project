@@ -48,11 +48,13 @@ int main() {
                 break;
             }
             avl->sort();
+            avl->medianValue();
             Node *root = avl->build(avl->getNodesAmount(), avl->getNodesValues());
             Action action(root, treeType);
             int actionResult = action.handleAction();
             if(actionResult == 0){
                 cout<<"Program exited with status: "<< actionResult;
+                cout << "\n";
                 return 0;
             }
             break;
