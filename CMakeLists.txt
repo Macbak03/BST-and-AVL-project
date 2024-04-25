@@ -11,4 +11,8 @@ add_executable(BST_and_AVL main.cpp
         BST.h
         BST.cpp
         Action.h
-        Action.cpp)
+        Action.cpp
+        Balancer.h
+        Balancer.cpp
+        Remover.h
+        Remover.cpp)

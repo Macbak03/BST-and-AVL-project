@@ -1,6 +1,4 @@
 #include <iostream>
-#include <limits>
-#include <sstream>
 #include "algorithm"
 #include "AVL.h"
 
@@ -26,15 +24,6 @@ Node *AVL::build(int nodesAmount, std::vector<int> values) {
     Node* node = new Node(values[medianIndex]);
     std::vector<int> leftValues(values.begin(), values.begin() + medianIndex);
     std::vector<int> rightValues(values.begin() + medianIndex + 1, values.end());
-   /* std::cout<<"value---"<<node->value<<"---value\n";
-    for (int leftValue: leftValues) {
-        std::cout<<leftValue<<" ";
-    }
-    std::cout<<"\n";
-    for (int rightValue : rightValues) {
-        std::cout<<rightValue<<" ";
-    }
-    std::cout<<"\n";*/
     if(!leftValues.empty()){
         node->left = build(leftValues.size(), leftValues);
     }
@@ -44,31 +33,6 @@ Node *AVL::build(int nodesAmount, std::vector<int> values) {
     return node;
 }
 
-int AVL::insertNodeValues()
-{
-    std::cout << "insert>";
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    std::string line;
-    getline(std::cin, line);
-    std::istringstream iss(line);
-    int value, count = 0;
-
-    while (iss >> value) {
-        if (count < nodesAmount) {
-            nodesValues.push_back(value);
-            count++;
-        } else {
-            std::cerr << "Error: More numbers entered than allowed (" << nodesAmount << ").\n";
-            return -1;
-        }
-    }
-    if (count < nodesAmount) {
-        std::cerr << "Error: Fewer numbers entered than required (" << nodesAmount << ").\n";
-        return -1;
-    }
-    return 0;
-}
 
 int AVL::getMedianIndex(int nodesAmount) {
     int amount = nodesAmount;

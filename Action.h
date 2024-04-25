@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <string>
 #include "Tree.h"
 
@@ -12,21 +11,25 @@ private:
     Node* root;
     std::string treeType;
     static int checkActionType(const std::string& action);
+
     static void showHelp();
     void print();
-    void remove();
-    void deleteTree(Node* node, std::vector<Node*> &deletedNodes);
+    void startRemove();
+    void deleteTree(Node* node);
     void exportTree(Node* node, std::string treeName);
     void rebalance();
     static void findMinMax(Node* node);
 
     void generateTikz(Node* node, std::ofstream& outFile);
-protected:
+
     void printPreOrder(Node* node);
     void printPostOrder(Node* node);
     void printInOrder(Node* node);
+
     Node* findMin(Node* node);
-    Node* removeHelp(Node* node, int key);
-    std::vector<Node*> deleteHelp();
+    Node* remove(Node* node, int key);
+
+    static Node* rotateRight(Node* rotator);
+    static Node* rotateLeft(Node* rotator);
 };
 

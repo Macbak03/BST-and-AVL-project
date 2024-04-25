@@ -7,7 +7,6 @@ public:
     AVL();
     void sort();
     Node * build(int nodesAmount, std::vector<int> values);
-    int insertNodeValues() override;
 
     int getNodesAmount();
     std::vector<int> getNodesValues();
