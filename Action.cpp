@@ -95,10 +95,10 @@ void Action::showHelp() {
     cout << left; // Align text to the left
     cout << setw(width) << "Help" << "Show this message\n";  // done 
     cout << setw(width) << "Print" << "Print the tree using In-order, Pre-order, Post-order\n"; // done
-    cout << setw(width) << "Remove" << "Remove elements from the tree\n"; // done + balance dodac tej trzeba :)
+    cout << setw(width) << "Remove" << "Remove elements from the tree\n"; // done
     cout << setw(width) << "Delete" << "Delete the whole tree\n"; // done
     cout << setw(width) << "Export" << "Export the tree to tikzpicture\n"; // done 
-    cout << setw(width) << "Rebalance" << "Rebalance the tree\n";
+    cout << setw(width) << "Rebalance" << "Rebalance the tree\n"; // done
     cout << setw(width) << "FindMinMax" << "Finds minimal and maximal key in the tree\n"; //done
     cout << setw(width) << "Exit" << "Exits the program (same as Ctrl+D)\n"; //done
 }
@@ -106,6 +106,10 @@ void Action::showHelp() {
 
 
 void Action::print() {
+    // if(root == nullptr){
+    //     cout << "Empty";
+    //     return;
+    // }
     cout << "In-Order: ";
     printInOrder(root);
     cout << "\n";

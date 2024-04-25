@@ -8,10 +8,14 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
+
+    int nodesNumber;
+    string nodes;
     string treeType;
-    cout << "tree type>";
-    cin >> treeType;
+    if(argc > 2){
+        treeType = argv[2];
+    }
     if (treeType == "BST") {
         BST *bst = new BST();
         int insert = bst->insertNodeValues();
