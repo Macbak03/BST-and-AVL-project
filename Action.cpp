@@ -5,6 +5,7 @@
 #include <cmath>
 #include "Action.h"
 #include "Balancer.h"
+#include "Remover.h"
 
 
 using namespace std;
@@ -33,7 +34,7 @@ int Action::handleAction() {
                 break;
             }
             case 3: { //Remove
-                startRemove();
+                remove();
                 break;
             }
             case 4: { //Delete
@@ -98,7 +99,7 @@ void Action::showHelp() {
     cout << setw(width) << "Delete" << "Delete the whole tree\n"; // done
     cout << setw(width) << "Export" << "Export the tree to tikzpicture\n"; // done 
     cout << setw(width) << "Rebalance" << "Rebalance the tree\n";
-    cout << setw(width) << "FindMinMax" << "Finds minimal and maximal value in the tree\n"; //done
+    cout << setw(width) << "FindMinMax" << "Finds minimal and maximal key in the tree\n"; //done
     cout << setw(width) << "Exit" << "Exits the program (same as Ctrl+D)\n"; //done
 }
 
@@ -119,7 +120,7 @@ void Action::print() {
 void Action::printPreOrder(Node *node) {
     if (node == nullptr)
         return;
-    std::cout << node->value << ", ";
+    std::cout << node->key << ", ";
     printPreOrder(node->left);
     printPreOrder(node->right);
 }
@@ -129,55 +130,21 @@ void Action::printPostOrder(Node *node) {
         return;
     printPostOrder(node->left);
     printPostOrder(node->right);
-    std::cout << node->value << ", ";
+    std::cout << node->key << ", ";
 }
 
 void Action::printInOrder(Node *node) {
     if (node == nullptr)
         return;
     printInOrder(node->left);
-    std::cout << node->value << ", ";
+    std::cout << node->key << ", ";
     printInOrder(node->right);
 }
 
 
 
-Node *Action::findMin(Node *node) {
-    while (node->left != nullptr) {
-        node = node->left;
-    }
-    return node;
-}
 
-Node *Action::remove(Node *node, int key) {
-    if (node == nullptr) {
-        return nullptr;
-    }
-
-    if (key < node->value) {
-        node->left = remove(node->left, key);
-    } else if (key > node->value) {
-        node->right = remove(node->right, key);
-    } else {
-
-        if (node->left == nullptr) {
-            Node *tmp = node->right;
-            delete node;
-            return tmp;
-        } else if (node->right == nullptr) {
-            Node *tmp = node->left;
-            delete node;
-            return tmp;
-        }
-
-        Node *tmp = findMin(node->right);
-        node->value = tmp->value;
-        node->right = remove(node->right, tmp->value);
-    }
-    return node;
-}
-
-void Action::startRemove() {
+void Action::remove() {
     int numberOfNodesToDelete;
     cout << "Nodes> ";
     cin >> numberOfNodesToDelete;
@@ -185,20 +152,11 @@ void Action::startRemove() {
     vector<int> keys(numberOfNodesToDelete);
 
     cout << "Delete> ";
-    for (int key: keys) {
-        cin >> key;
+    for (int i = 0; i < keys.size(); i++) {
+        cin >> keys[i];
     }
-
-    if (treeType == "BST") {
-        for (int key: keys) {
-            root = remove(root, key);
-        }
-    } else {
-        for (int key: keys) {
-            root = remove(root, key);
-            //balance
-        }
-    }
+    Remover remover(root);
+    root = remover.startRemove(treeType, &keys);
 }
 
 
@@ -212,7 +170,7 @@ void Action::deleteTree(Node *node) {
     deleteTree(node->left);
     deleteTree(node->right);
 
-    cout << node->value << " ";
+    cout << node->key << " ";
 
     delete node;
 }
@@ -226,7 +184,7 @@ void Action::generateTikz(Node *node, ofstream &outFile) {
         return;
     }
 
-    outFile << "\\node {" << node->value << "}\n";
+    outFile << "\\node {" << node->key << "}\n";
 
     if (node->left != nullptr) {
         outFile << "child {" << std::endl;
@@ -262,7 +220,7 @@ void Action::exportTree(Node *node, string treeName) {
             << "level 3/.style={sibling distance=20mm}, "
             << "level 4/.style={sibling distance=10mm}}\n";
     outFile << "\\begin{scope}[every node/.style={circle,draw}, level distance=30mm]\n";
-    outFile << "\\node {" << node->value << "}\n";
+    outFile << "\\node {" << node->key << "}\n";
     generateTikz(node, outFile);
     outFile << ";\n";
     outFile << "\\end{scope}\n";
@@ -299,15 +257,15 @@ void Action::rebalance() {
 void Action::findMinMax(Node *node) {
     Node *nodeLeft = node;
     Node *nodeRight = node;
-    int min = nodeLeft->value;
-    int max = nodeRight->value;
+    int min = nodeLeft->key;
+    int max = nodeRight->key;
     while (nodeLeft->left != nullptr) {
         nodeLeft = nodeLeft->left;
-        min = nodeLeft->value;
+        min = nodeLeft->key;
     }
     while (nodeRight->right != nullptr) {
         nodeRight = nodeRight->right;
-        max = nodeRight->value;
+        max = nodeRight->key;
     }
     cout << "Min: " << min << endl;
     cout << "Max: " << max << endl;

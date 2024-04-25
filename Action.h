@@ -14,7 +14,7 @@ private:
 
     static void showHelp();
     void print();
-    void startRemove();
+    void remove();
     void deleteTree(Node* node);
     void exportTree(Node* node, std::string treeName);
     void rebalance();
@@ -26,10 +26,5 @@ private:
     void printPostOrder(Node* node);
     void printInOrder(Node* node);
 
-    Node* findMin(Node* node);
-    Node* remove(Node* node, int key);
-
-    static Node* rotateRight(Node* rotator);
-    static Node* rotateLeft(Node* rotator);
 };
 

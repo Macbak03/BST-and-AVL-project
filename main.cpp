@@ -8,63 +8,43 @@
 
 using namespace std;
 
-int checkTreeType(const string &treeType) {
-    if (treeType == "BST") {
-        return 0;
-    } else if (treeType == "AVL") {
-        return 1;
-    } else {
-        return -1;
-    }
-}
-
-
 int main() {
     string treeType;
     cout << "tree type>";
     cin >> treeType;
-    int treeTypeValidation = checkTreeType(treeType);
-    switch (treeTypeValidation) {
-        case 0: { //BST
-            BST *bst = new BST();
-            int insert = bst->insertNodeValues();
-            if(insert == -1){
-                break;
-            }
-            Node *root = nullptr;
-            root = bst->build(bst->getNodesValues(), root);
-            Action action(root, treeType);
-            int actionResult = action.handleAction();
-            if(actionResult == 0){
-                cout<<"Program exited with status: "<<actionResult;
-                return 0;
-            }
-            break;
+    if (treeType == "BST") {
+        BST *bst = new BST();
+        int insert = bst->insertNodeValues();
+        if (insert != 0) {
+            return insert;
         }
-        case 1: { //AVL
-            AVL *avl = new AVL();
-            int insert = avl->insertNodeValues();
-            if (insert == -1) {
-                break;
-            }
-            avl->sort();
-            avl->medianValue();
-            Node *root = avl->build(avl->getNodesAmount(), avl->getNodesValues());
-            Action action(root, treeType);
-            int actionResult = action.handleAction();
-            if(actionResult == 0){
-                cout<<"Program exited with status: "<< actionResult;
-                cout << "\n";
-                return 0;
-            }
-            break;
+        Node *root = nullptr;
+        root = bst->build(bst->getNodesValues(), root);
+        Action action(root, treeType);
+        int actionResult = action.handleAction();
+        if (actionResult == 0) {
+            cout << "Program exited with status: " << actionResult;
+            return 0;
         }
-        default: {
-            cout << "Invalid tree type";
-            break;
+    } else if (treeType == "AVL") {
+        AVL *avl = new AVL();
+        int insert = avl->insertNodeValues();
+        if (insert != 0) {
+            return insert;
         }
+        avl->sort();
+        avl->medianValue();
+        Node *root = avl->build(avl->getNodesAmount(), avl->getNodesValues());
+        Action action(root, treeType);
+        int actionResult = action.handleAction();
+        if (actionResult == 0) {
+            cout << "Program exited with status: " << actionResult;
+            cout << "\n";
+            return 0;
+        }
+    } else {
+        cout << "Invalid tree type";
     }
-
 
     return 0;
 }

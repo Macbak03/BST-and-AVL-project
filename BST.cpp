@@ -10,9 +10,9 @@ Node *BST::insert(int value, Node *node) {
     if (node == nullptr) {
         return new Node(value);
     }
-    if (value < node->value) {
+    if (value < node->key) {
         node->left = insert(value, node->left);
-    } else if (value > node->value) {
+    } else if (value > node->key) {
         node->right = insert(value, node->right);
     } else {
         return node;

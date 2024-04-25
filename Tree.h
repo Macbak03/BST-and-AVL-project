@@ -5,9 +5,9 @@
 struct Node{
     Node* left;
     Node* right;
-    int value;
+    int key;
 
-    explicit Node(int val) : value(val), left(nullptr), right(nullptr) {}
+    explicit Node(int val) : key(val), left(nullptr), right(nullptr) {}
 };
 
 class Tree {
